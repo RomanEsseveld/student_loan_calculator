@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studieschuld Calculator</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <h1>Studieschuld Calculator</h1>
+            <div class="header-links">
+                <a href="#" id="showAbout">Over deze calculator</a>
+                <a href="#" id="showAssumptions">Aannames & Rekenregels</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Explanation Block -->
+        <div class="explanations">
+            <p>Je studieschuld terugbetalen is lastiger geworden door de aangepaste renteregels van de overheid. De beloofde 0% rente gaat niet door, maar er zijn nog steeds gunstige regelingen beschikbaar. Op deze website kun je berekenen wat voor jou het beste is: snel aflossen om rente te besparen, of minimaal aflossen en gebruik maken van de kwijtscheldingsregeling.</p>
+        </div>
+
+        <div class="section-separator"></div>
+
+        <!-- Calculator Form -->
+        <section class="form-section">
+            <form id="calculatorForm" class="form-grid">
+                <div class="main-inputs">
+                    <div class="form-group">
+                        <label class="form-label" for="loan_type">
+                            Terugbetalingsregeling
+                        </label>
+                        <select class="form-input" id="loan_type" required>
+                            <option value="SF35">SF35</option>
+                            <option value="SF15">SF15</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="start_year">
+                            Start Aanloopfase
+                            <span class="info-tooltip" title="Dit is het eerste jaar na het behalen van je diploma">ⓘ</span>
+                        </label>
+                        <select class="form-input" id="start_year" required>
+                            <!-- Will be populated by JavaScript -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="is_single">
+                            Alleenstaand zonder kinderen
+                            <span class="info-tooltip" title="Dit beïnvloedt de draagkrachtvrije voet in de berekening">ⓘ</span>
+                        </label>
+                        <select class="form-input" id="is_single" required>
+                            <option value="true">Ja</option>
+                            <option value="false">Nee</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="debt_amount">
+                            Totale Studieschuld (€)
+                            <span class="info-tooltip" title="Dit is uw huidige totale studieschuld, inclusief eventueel opgebouwde rente tot nu toe">ⓘ</span>
+                        </label>
+                        <input type="text" class="form-input" id="debt_amount" required placeholder="Voer bedrag in">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="reference_income">
+                            Bruto Jaarinkomen (€)
+                            <span class="info-tooltip" title="Dit is uw inkomen van 2 jaar geleden (peiljaar). Tel het inkomen van uw partner altijd mee indien van toepassing.">ⓘ</span>
+                        </label>
+                        <input type="text" class="form-input" id="reference_income" required placeholder="Voer inkomen in">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="max_payment">
+                            Maximaal bereid om maandelijks af te lossen (€)
+                            <span class="info-tooltip" title="Dit is het maximale bedrag dat je bereid bent maandelijks af te lossen. Dit bedrag kan niet lager zijn dan de minimale maandelijkse aflossing">ⓘ</span>
+                        </label>
+                        <input type="text" class="form-input" id="max_payment" required placeholder="Voer maximaal bedrag in">
+                    </div>
+                </div>
+
+                <div class="future-rates">
+                    <h3 class="future-rates-title">
+                        Toekomstige Rentepercentages
+                        <span class="info-tooltip" title="De rente op studieschulden wordt elke 5 jaar herzien. Vul verschillende rentepercentages in om te zien welk effect dit heeft op je totale schuld en maandlasten.">ⓘ</span>
+                    </h3>
+                    <div id="future_rates_container">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <button type="submit" class="button-primary">Bereken</button>
+            </form>
+        </section>
+
+        </div> <!-- Close the regular container -->
+
+        <!-- Results Section - Outside the regular container -->
+        <div class="container-wide">
+            <div id="summary" style="display: none;">
+                <!-- Will be populated by JavaScript -->
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-container">
+                <div class="chart-container">
+                    <canvas id="minimumChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="optimizedChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Modal -->
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <span class="close" data-modal="aboutModal">&times;</span>
+            <h2>Over deze calculator</h2>
+            
+            <h3>Achtergrond</h3>
+            <p style="line-height: 1.6; margin-bottom: 20px;">
+                De huidige generatie afgestudeerden wordt geconfronteerd met aanzienlijke studieschulden, een situatie die voor velen 
+                complexer is geworden door het herziene rentebeleid van de overheid. Waar oorspronkelijk een rentepercentage van 0% was toegezegd, 
+                is deze toezegging inmiddels herzien, wat begrijpelijkerwijs tot onzekerheid leidt over de financiële implicaties.
+            </p>
+            <p style="line-height: 1.6; margin-bottom: 20px;">
+                Het is echter belangrijk te benadrukken dat de terugbetalingsregeling diverse gunstige voorwaarden bevat die de impact kunnen beperken. 
+                Deze website biedt een objectieve analyse van uw persoonlijke aflossituatie, waarbij verschillende scenario's worden doorgerekend op basis 
+                van uw specifieke omstandigheden.
+            </p>
+            <p style="line-height: 1.6; margin-bottom: 20px;">
+                Afhankelijk van uw situatie kan het financieel voordeliger zijn om versneld af te lossen en daarmee rentekosten te minimaliseren, 
+                of juist om vast te houden aan de minimale maandelijkse aflossing, waarbij gebruik wordt gemaakt van de wettelijke kwijtscheldingsregeling 
+                na de vastgestelde aflosperiode. Door middel van deze berekeningen kunt u een weloverwogen beslissing nemen over uw optimale aflosstrategie.
+            </p>
+            
+            <h3>Doel</h3>
+            <p>Deze calculator helpt (oud-)studenten om inzicht te krijgen in hun studieschuldaflossing onder het leenstelsel.</p>
+            
+            <!-- Rest of the About modal content -->
+        </div>
+    </div>
+
+    <!-- Assumptions Modal -->
+    <div id="assumptionsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" data-modal="assumptionsModal">&times;</span>
+            <h2>Aannames & Rekenregels</h2>
+            
+            <h3>Basis Uitgangspunten</h3>
+            <p>Deze calculator berekent uw maandelijkse aflossing op basis van de officiële DUO-richtlijnen. De minimale 
+               maandelijkse aflossing wordt bepaald door het laagste bedrag van twee berekeningen:</p>
+            <ol>
+                <li>Het wettelijk maandbedrag</li>
+                <li>De minimale betaling op basis van uw draagkracht</li>
+            </ol>
+
+            <h3>Terugbetalingsregelingen</h3>
+            <h4>SF35 (35-jarige terugbetaling)</h4>
+            <ul>
+                <li>Maximale terugbetaaltermijn: 35 jaar</li>
+                <li>Maandelijkse aflossing: 4% van inkomen boven draagkrachtvrije voet</li>
+                <li>Draagkrachtvrije voet alleenstaand: 100% van minimumloon</li>
+                <li>Draagkrachtvrije voet met partner: 143% van minimumloon</li>
+            </ul>
+
+            <h4>SF15 (15-jarige terugbetaling)</h4>
+            <ul>
+                <li>Maximale terugbetaaltermijn: 15 jaar</li>
+                <li>Maandelijkse aflossing: 12% van inkomen boven draagkrachtvrije voet</li>
+                <li>Draagkrachtvrije voet alleenstaand: 84% van minimumloon</li>
+                <li>Draagkrachtvrije voet met partner: 120% van minimumloon</li>
+            </ul>
+
+            <h3>Kerncijfers en Termijnen</h3>
+            
+            <h4>Wettelijk Maandbedrag</h4>
+            <p>Het wettelijke maandbedrag wordt berekend als: (Totale schuld + opgebouwde rente) ÷ aantal maanden</p>
+            
+            <h4>Berekening van Draagkracht</h4>
+            <p>De berekening verschilt op basis van uw persoonlijke situatie:</p>
+            <ul>
+                <li>Voor alleenstaanden zonder kinderen: (Bruto jaarinkomen – draagkrachtvrije voet) × percentage ÷ 12</li>
+                <li>Voor partners of alleenstaande ouders: (Gezamenlijk bruto jaarinkomen – (draagkrachtvrije voet × multiplier)) × percentage ÷ 12</li>
+            </ul>
+
+            <h3>Tijdlijn van Aflossing</h3>
+            
+            <h4>Aanloopfase (Eerste 2 jaar)</h4>
+            <ul>
+                <li>U hoeft nog niet af te lossen</li>
+                <li>De rente wordt wel berekend en maandelijks bij uw totale schuld opgeteld</li>
+                <li>Deze 2 jaar tellen niet mee voor de totale aflosperiode</li>
+            </ul>
+            
+            <h4>Reguliere Aflosperiode</h4>
+            <ul>
+                <li>Start na de aanloopfase van 2 jaar</li>
+                <li>Loopt maximaal 15 of 35 jaar (afhankelijk van regeling)</li>
+                <li>De 15 of 35 jaar gaat pas in na de aanloopfase</li>
+                <li>Na deze periode wordt eventuele restschuld kwijtgescholden</li>
+            </ul>
+            
+            <h3>Jaarlijkse Aanpassingen</h3>
+            
+            <h4>Inkomen</h4>
+            <ul>
+                <li>Jaarlijkse stijging bruto inkomen: 3% (aanname)</li>
+                <li>Draagkrachtvrije voet stijgt ook met 3% per jaar (aanname)</li>
+            </ul>
+            
+            <h4>Rente</h4>
+            <ul>
+                <li>Wordt vastgezet voor periodes van 5 jaar</li>
+                <li>Berekening en optelling gebeurt maandelijks bij de totale schuld</li>
+            </ul>
+
+            <h3>Draagkracht Bepaling</h3>
+            
+            <h4>Peiljaar</h4>
+            <p>Voor de berekening van uw maandbedrag is uw inkomen van 2 jaar geleden van belang: het 'peiljaar'.</p>
+            <ul>
+                <li>Bij significante inkomensdaling: mogelijkheid tot verlegging peiljaar bij DUO</li>
+                <li>Deze calculator rekent met het standaard peiljaar</li>
+            </ul>
+        </div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <!-- Legal Section -->
+                <div class="footer-section">
+                    <h3>Juridische Informatie</h3>
+                    <div class="footer-text">
+                        <p>Deze calculator geeft alleen schattingen en moet niet worden beschouwd als financieel advies. Resultaten kunnen variëren op basis van verschillende factoren.</p>
+                        <p>Raadpleeg een gekwalificeerd financieel adviseur voordat u beslissingen neemt over uw studieschuld.</p>
+                        </div>
+                        </div>
+
+                <!-- Quick Links -->
+                <div class="footer-section">
+                    <h3>Handige Links</h3>
+                    <ul class="footer-links">
+                        <li>
+                            <a href="https://duo.nl/particulier/studieschuld-terugbetalen/" target="_blank">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                    <polyline points="15 3 21 3 21 9"></polyline>
+                                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                                </svg>
+                                DUO Studieschuld Terugbetalen
+                            </a>
+                        </li>
+                        <li>
+                            <a href="privacy-policy.html">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                    <polyline points="15 3 21 3 21 9"></polyline>
+                                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                                </svg>
+                                Privacybeleid
+                            </a>
+                        </li>
+                        <li>
+                            <a href="terms.html">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                    <polyline points="15 3 21 3 21 9"></polyline>
+                                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                                </svg>
+                                Gebruiksvoorwaarden
+                            </a>
+                        </li>
+                    </ul>
+                        </div>
+
+                <!-- Contact & Support -->
+                <div class="footer-section">
+                    <h3>Steun Dit Project</h3>
+                    <div>
+                        <a href="https://buymeacoffee.com/studieschuldcalculator"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="donate-button">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                            <span>Doneren</span>
+                        </a>
+                        
+                        <a href="mailto:studieschuldcalculator@mail.com" class="contact-link">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                            <span>Contact</span>
+                        </a>
+                        </div>
+                        </div>
+                    </div>
+
+            <!-- Bottom Copyright -->
+            <div class="footer-bottom">
+                <p>© <script>document.write(new Date().getFullYear())</script> Studieschuld Calculator. Alle rechten voorbehouden.</p>
+                <p>Laatst bijgewerkt: <script>document.write(new Date().toLocaleDateString('nl-NL'))</script></p>
+                        </div>
+                    </div>
+    </footer>
+</body>
+</html> 

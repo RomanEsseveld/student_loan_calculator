@@ -1,0 +1,315 @@
+.navbar-nav > li > a,
+.nav > li > a {
+    color: #2196F3 !important;
+    text-decoration: none;
+}
+
+.navbar-nav > li > a:hover,
+.nav > li > a:hover {
+    color: #1976D2 !important;
+    text-decoration: none;
+}
+
+/* Button Style */
+.welcome-btn {
+    background: #2196F3;
+    color: #fff !important;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.welcome-btn:hover {
+    background: #1976D2;
+    color: #fff !important;
+}
+
+/* Links */
+a {
+    color: #2196F3 !important;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    color: #1976D2 !important;
+    text-decoration: none;
+}
+
+/* Header Links */
+.header-links a {
+    color: #2196F3 !important;
+    margin: 0 15px;
+    text-decoration: none;
+    font-size: 1.125rem;
+}
+
+.header-links a:hover {
+    color: #1976D2 !important;
+}
+
+/* Form Components */
+.form-section {
+    background: var(--color-background);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius);
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+}
+
+.main-inputs {
+    background: white;
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--color-border);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.form-group:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    font-weight: 500;
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+}
+
+.form-input {
+    width: 100%;
+    padding: var(--spacing-sm);
+    border: 2px solid var(--color-border);
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-base);
+    transition: all 0.2s ease;
+    background-color: white;
+    height: 40px;
+    box-sizing: border-box;
+}
+
+.form-input:hover {
+    border-color: var(--color-primary-light);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.future-rates {
+    background: white;
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--color-border);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.future-rates-title {
+    font-weight: 500;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-md);
+}
+
+.rate-input-group {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    background: var(--color-background);
+}
+
+.rate-input-group label {
+    flex: 0 0 100px;
+    font-weight: normal;
+    margin: 0;
+}
+
+.rate-input-group input {
+    width: 80px;
+    text-align: right;
+    padding: var(--spacing-sm);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+}
+
+.rate-input-group input:disabled {
+    background-color: var(--color-background);
+    border-color: var(--color-border);
+    color: var(--color-text);
+}
+
+.button-primary {
+    background-color: var(--color-primary);
+    color: white;
+    padding: var(--spacing-md) var(--spacing-xl);
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-base);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    margin-top: var(--spacing-lg);
+    box-shadow: 0 2px 4px rgba(33, 150, 243, 0.3);
+}
+
+.button-primary:hover {
+    background-color: var(--color-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(33, 150, 243, 0.4);
+}
+
+.info-tooltip {
+    color: var(--color-text-light);
+    font-size: var(--font-size-sm);
+    margin-left: var(--spacing-xs);
+    cursor: help;
+}
+
+/* Add CSS Variables */
+:root {
+    --color-primary: #2196F3;
+    --color-primary-dark: #1976D2;
+    --color-primary-light: #E3F2FD;
+    --color-accent: #FFD700;
+    --color-accent-hover: #FFC400;
+    --color-text: #333333;
+    --color-text-light: #666666;
+    --color-background: #f8f9fa;
+    --color-border: #e5e7eb;
+    
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+    
+    --border-radius: 0.5rem;
+} 
+
+/* Container */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Results Section */
+#summary {
+    max-width: 600px;
+    margin: 2rem auto;
+}
+
+/* Charts Container */
+.charts-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+}
+
+.chart-container {
+    background: white;
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    height: 500px;
+}
+
+/* Header Section */
+.main-header {
+    padding: calc(var(--spacing-md) / 2) 0;
+    margin-bottom: var(--spacing-md);
+}
+
+.main-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: calc(var(--spacing-sm) / 2);
+}
+
+/* Explanations */
+.explanations {
+    max-width: 600px;
+    margin: var(--spacing-md) auto var(--spacing-xl);
+    text-align: center;
+}
+
+.explanations p {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    margin-bottom: var(--spacing-md);
+}
+
+/* Footer */
+.footer-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+}
+
+/* Spacing Adjustments */
+.section-separator {
+    margin: var(--spacing-lg) auto;
+    max-width: 600px;
+}
+
+/* Form Elements */
+.form-group {
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+}
+
+.button-primary {
+    max-width: 300px;
+    margin: var(--spacing-lg) auto 0;
+    display: block;
+}
+
+/* Modal Adjustments */
+.modal-content {
+    max-width: 600px;
+    margin: 3% auto;
+    padding: var(--spacing-xl);
+}
+
+.header-links {
+    margin: calc(var(--spacing-sm) / 2) 0;
+}
+
+.explanations {
+    margin-top: var(--spacing-md);
+} 
