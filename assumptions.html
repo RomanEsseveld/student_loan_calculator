@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aannames & Rekenregels - Studieschuld Calculator</title>
+    <style>
+        :root {
+            --primary-color: #2196F3;
+            --text-color: #333;
+            --border-color: #e0e0e0;
+            --background-color: #f8f9fa;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .content {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: var(--text-color);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        h3 {
+            color: var(--text-color);
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        h4 {
+            color: var(--text-color);
+            font-size: 1.1rem;
+            margin-top: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        ul, ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .last-updated {
+            margin-top: 3rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>Aannames & Rekenregels</h1>
+        
+        <h2>Basis Uitgangspunten</h2>
+        <p>Deze calculator berekent uw maandelijkse aflossing op basis van de officiële DUO-richtlijnen. De minimale 
+           maandelijkse aflossing wordt bepaald door het laagste bedrag van twee berekeningen:</p>
+        <ol>
+            <li>Het wettelijk maandbedrag</li>
+            <li>De minimale betaling op basis van uw draagkracht</li>
+        </ol>
+
+        <h2>Terugbetalingsregelingen</h2>
+        <h3>SF35 (35-jarige terugbetaling)</h3>
+        <ul>
+            <li>Maximale terugbetaaltermijn: 35 jaar</li>
+            <li>Maandelijkse aflossing: 4% van inkomen boven draagkrachtvrije voet</li>
+            <li>Draagkrachtvrije voet alleenstaand: 100% van minimumloon</li>
+            <li>Draagkrachtvrije voet met partner: 143% van minimumloon</li>
+        </ul>
+
+        <h3>SF15 (15-jarige terugbetaling)</h3>
+        <ul>
+            <li>Maximale terugbetaaltermijn: 15 jaar</li>
+            <li>Maandelijkse aflossing: 12% van inkomen boven draagkrachtvrije voet</li>
+            <li>Draagkrachtvrije voet alleenstaand: 84% van minimumloon</li>
+            <li>Draagkrachtvrije voet met partner: 120% van minimumloon</li>
+        </ul>
+
+        <h2>Kerncijfers en Termijnen</h2>
+        <h3>Wettelijk Maandbedrag</h3>
+        <p>Het wettelijke maandbedrag wordt berekend als: (Totale schuld + opgebouwde rente) ÷ aantal maanden</p>
+        
+        <h3>Berekening van Draagkracht</h3>
+        <p>De berekening verschilt op basis van uw persoonlijke situatie:</p>
+        <ul>
+            <li>Voor alleenstaanden zonder kinderen: (Bruto jaarinkomen – draagkrachtvrije voet) × percentage ÷ 12</li>
+            <li>Voor partners of alleenstaande ouders: (Gezamenlijk bruto jaarinkomen – (draagkrachtvrije voet × multiplier)) × percentage ÷ 12</li>
+        </ul>
+
+        <h2>Tijdlijn van Aflossing</h2>
+        <h3>Aanloopfase (Eerste 2 jaar)</h3>
+        <ul>
+            <li>U hoeft nog niet af te lossen</li>
+            <li>De rente wordt wel berekend en maandelijks bij uw totale schuld opgeteld</li>
+            <li>Deze 2 jaar tellen niet mee voor de totale aflosperiode</li>
+        </ul>
+        
+        <h3>Reguliere Aflosperiode</h3>
+        <ul>
+            <li>Start na de aanloopfase van 2 jaar</li>
+            <li>Loopt maximaal 15 of 35 jaar (afhankelijk van regeling)</li>
+            <li>De 15 of 35 jaar gaat pas in na de aanloopfase</li>
+            <li>Na deze periode wordt eventuele restschuld kwijtgescholden</li>
+        </ul>
+        
+        <h2>Jaarlijkse Aanpassingen</h2>
+        <h3>Inkomen</h3>
+        <ul>
+            <li>Jaarlijkse stijging bruto inkomen: 3% (aanname)</li>
+            <li>Draagkrachtvrije voet stijgt ook met 3% per jaar (aanname)</li>
+        </ul>
+        
+        <h3>Rente</h3>
+        <ul>
+            <li>Wordt vastgezet voor periodes van 5 jaar</li>
+            <li>Berekening en optelling gebeurt maandelijks bij de totale schuld</li>
+        </ul>
+
+        <h2>Draagkracht Bepaling</h2>
+        <h3>Peiljaar</h3>
+        <p>Voor de berekening van uw maandbedrag is uw inkomen van 2 jaar geleden van belang: het 'peiljaar'.</p>
+        <ul>
+            <li>Bij significante inkomensdaling: mogelijkheid tot verlegging peiljaar bij DUO</li>
+            <li>Deze calculator rekent met het standaard peiljaar</li>
+        </ul>
+
+        <div class="last-updated">
+            Laatst bijgewerkt: januari 2024
+        </div>
+
+        <a href="index.html" class="back-link">← Terug naar calculator</a>
+    </div>
+</body>
+</html> 
