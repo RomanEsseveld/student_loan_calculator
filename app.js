@@ -308,36 +308,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeYearDropdown();
     initializeFutureRates();
 
-    // About modal functionality
-    const btn = document.getElementById('showAbout');
-    const assumptionsBtn = document.getElementById('showAssumptions');
-    const modals = {
-        aboutModal: document.getElementById('aboutModal'),
-        assumptionsModal: document.getElementById('assumptionsModal')
-    };
-    
-    btn.onclick = function() {
-        modals.aboutModal.style.display = 'block';
-    }
-    
-    assumptionsBtn.onclick = function() {
-        modals.assumptionsModal.style.display = 'block';
-    }
-    
-    // Handle closing for all modals
-    document.querySelectorAll('.close').forEach(closeBtn => {
-        closeBtn.onclick = function() {
-            const modalId = this.getAttribute('data-modal');
-            modals[modalId].style.display = 'none';
-        }
-    });
-    
-    window.onclick = function(event) {
-        if (event.target.classList.contains('modal')) {
-            event.target.style.display = 'none';
-        }
-    }
-
     // Handle start year change
     document.getElementById('start_year').addEventListener('change', initializeFutureRates);
 
