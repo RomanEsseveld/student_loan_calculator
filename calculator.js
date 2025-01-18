@@ -96,8 +96,19 @@ export default class LoanCalculator {
         const repaymentEndYear = this.params.startYear + 2 + Math.ceil(this.loanConfig.REPAYMENT_MONTHS / 12);
         const gracePeriodEnd = this.params.startYear + 2;
 
+        // Add initial entry with original debt amount
+        timeline.push({
+            year: currentYear,
+            monthlyPayment: 0,
+            totalPaid: 0,
+            remainingBalance: this.params.debtAmount,
+            interestPaid: 0,
+            annualIncome: initialIncome,
+            interestRate: this.getInterestRate(currentYear)
+        });
+
         // Generate timeline starting from current year until end of repayment
-        for (let year = 0; currentYear + year <= repaymentEndYear; year++) {
+        for (let year = 1; currentYear + year <= repaymentEndYear; year++) {
             const simulationYear = currentYear + year;
             const yearsFromStart = simulationYear - this.params.startYear;
             const annualIncome = initialIncome * Math.pow(1 + CONFIG.ANNUAL_INCOME_GROWTH, yearsFromStart);
@@ -185,8 +196,19 @@ export default class LoanCalculator {
         const repaymentEndYear = this.params.startYear + 2 + Math.ceil(this.loanConfig.REPAYMENT_MONTHS / 12);
         const gracePeriodEnd = this.params.startYear + 2;
 
+        // Add initial entry with original debt amount
+        timeline.push({
+            year: currentYear,
+            monthlyPayment: 0,
+            totalPaid: 0,
+            remainingBalance: this.params.debtAmount,
+            interestPaid: 0,
+            annualIncome: initialIncome,
+            interestRate: this.getInterestRate(currentYear)
+        });
+
         // Generate timeline starting from current year until end of repayment
-        for (let year = 0; currentYear + year <= repaymentEndYear; year++) {
+        for (let year = 1; currentYear + year <= repaymentEndYear; year++) {
             const simulationYear = currentYear + year;
             const yearsFromStart = simulationYear - this.params.startYear;
             const annualIncome = initialIncome * Math.pow(1 + CONFIG.ANNUAL_INCOME_GROWTH, yearsFromStart);
@@ -238,7 +260,7 @@ export default class LoanCalculator {
 
             timeline.push({
                 year: simulationYear,
-                monthlyPayment: optimalPayment,
+                monthlyPayment: simulationYear < gracePeriodEnd ? 0 : optimalPayment,
                 totalPaid: totalPaid,
                 remainingBalance: remainingBalance,
                 interestPaid: totalInterest,

@@ -80,19 +80,28 @@ function initializeFutureRates() {
 
 // Format number inputs with thousands separator
 function formatNumber(input) {
-    // Remove all non-digits first
-    const value = input.value.replace(/[^0-9]/g, '');
+    // Remove all non-digits and non-decimal separators first
+    let value = input.value.replace(/[^0-9,]/g, '');
+    
+    // Replace comma with dot for parsing
+    value = value.replace(',', '.');
+    
     if (value) {
-        const number = parseInt(value);
+        const number = parseFloat(value);
         if (!isNaN(number)) {
-            input.value = number.toLocaleString('nl-NL');
+            // Format with Dutch locale (dots for thousands, comma for decimals)
+            input.value = number.toLocaleString('nl-NL', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
         }
     }
 }
 
 // Get numeric value from formatted input
 function getNumericValue(input) {
-    const value = Number(input.value.replace(/[^0-9]/g, ''));
+    // Replace dots (thousand separators) with nothing and comma (decimal separator) with dot
+    const value = Number(input.value.replace(/\./g, '').replace(',', '.'));
     if (isNaN(value) || value < 0) {
         throw new Error(`Invalid number: ${input.value}`);
     }
