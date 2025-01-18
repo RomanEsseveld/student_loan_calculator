@@ -476,12 +476,16 @@ body {
     font-size: 0.875rem;
     padding: 0.5rem 0;
     transition: color 0.2s;
+    line-height: 1;
 }
 
 .contact-link svg {
     width: 16px;
     height: 16px;
     margin-right: 0.5rem;
+    flex-shrink: 0;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .contact-link:hover {
