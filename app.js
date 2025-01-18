@@ -83,17 +83,24 @@ function initializeFutureRates() {
 }
 
 // Format number inputs with thousands separator
-function formatNumber(input) {
-    // Remove all non-digits and non-decimal separators first
-    let value = input.value.replace(/[^0-9,]/g, '');
-    
-    // Replace comma with dot for parsing
-    value = value.replace(',', '.');
-    
+function formatNumber(input, isBlur = false) {
+    // If empty or just placeholder text, don't format
+    if (!input.value || input.value === input.placeholder) {
+        return;
+    }
+
+    // During typing, only remove non-digits
+    if (!isBlur) {
+        let value = input.value.replace(/[^\d]/g, '');
+        input.value = value;
+        return;
+    }
+
+    // On blur, format the number properly
+    let value = input.value.replace(/[^\d]/g, '');
     if (value) {
-        const number = parseFloat(value);
+        const number = parseInt(value);
         if (!isNaN(number)) {
-            // Format with Dutch locale (dots for thousands, comma for decimals)
             input.value = number.toLocaleString('nl-NL', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
@@ -104,12 +111,19 @@ function formatNumber(input) {
 
 // Get numeric value from formatted input
 function getNumericValue(input) {
-    // Replace dots (thousand separators) with nothing and comma (decimal separator) with dot
-    const value = Number(input.value.replace(/\./g, '').replace(',', '.'));
-    if (isNaN(value) || value < 0) {
-        throw new Error(`Invalid number: ${input.value}`);
+    if (!input.value || input.value === input.placeholder) return 0;
+    
+    // First remove the dots (thousand separators)
+    let value = input.value.replace(/\./g, '');
+    // Then replace comma with dot for decimal
+    value = value.replace(',', '.');
+    // Convert to number
+    const number = parseFloat(value);
+    
+    if (isNaN(number) || number < 0) {
+        throw new Error(`Ongeldig getal: ${input.value}`);
     }
-    return value;
+    return number;
 }
 
 // Helper function for Dutch number formatting
@@ -331,7 +345,25 @@ document.addEventListener('DOMContentLoaded', function() {
     // Format number inputs
     ['debt_amount', 'reference_income', 'max_payment'].forEach(id => {
         const input = document.getElementById(id);
-        input.addEventListener('input', () => formatNumber(input));
+        
+        // Add input event listener for basic formatting
+        input.addEventListener('input', () => formatNumber(input, false));
+        
+        // Add focus event listener to clear placeholder
+        input.addEventListener('focus', function() {
+            if (this.value === this.placeholder) {
+                this.value = '';
+            }
+        });
+        
+        // Add blur event listener for complete formatting
+        input.addEventListener('blur', function() {
+            if (!this.value) {
+                this.value = this.placeholder;
+            } else {
+                formatNumber(this, true);
+            }
+        });
     });
 
     // Allow manual editing of future rates
