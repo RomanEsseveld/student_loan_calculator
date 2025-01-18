@@ -1,6 +1,10 @@
 import LoanCalculator from './calculator.js';
 import { VALID_YEARS, CONFIG, YEARLY_CONSTANTS, LOAN_TYPES } from './constants.js';
 
+// Initialize chart variables
+let minimumChart = null;
+let optimizedChart = null;
+
 // Initialize the year dropdown
 function initializeYearDropdown() {
     const select = document.getElementById('start_year');
@@ -116,9 +120,6 @@ function formatDutchNumber(number) {
 }
 
 // Create separate charts for each strategy
-let minimumChart = null;
-let optimizedChart = null;
-
 function createChart(ctx, timeline, title) {
     const gridColor = '#e0e0e0';
     const fontFamily = 'Arial, sans-serif';
@@ -310,10 +311,17 @@ function updateCharts(minimumTimeline, optimizedTimeline) {
     const loanType = document.getElementById('loan_type').value;
     minimumChart = createChart(minimumCtx, minimumTimeline, `Minimale maandelijkse lasten (${loanType})`);
     optimizedChart = createChart(optimizedCtx, optimizedTimeline, `Versneld aflossen (${loanType})`);
+
+    // Make charts container visible
+    document.querySelector('.charts-container').style.display = 'grid';
 }
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', function() {
+    // Ensure output sections are hidden initially
+    document.getElementById('summary').classList.remove('visible');
+    document.querySelector('.charts-container').style.display = 'none';
+
     initializeYearDropdown();
     initializeFutureRates();
 
@@ -343,43 +351,69 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle form submission
     document.getElementById('calculatorForm').addEventListener('submit', function(e) {
         e.preventDefault();
-
-        console.log('Form submitted');
-        // Collect custom rates
-        const customRates = {};
-        document.querySelectorAll('.future-rate').forEach(input => {
-            const period = Number(input.dataset.period);
-            const value = Number(input.value);
-            if (isNaN(value) || value < 0 || value > 10) {
-                throw new Error(`Invalid interest rate: ${input.value}%`);
-            }
-            const rate = value / 100;
-            customRates[period] = rate;
-            console.log(`Period ${period}-${period+4}: ${rate * 100}%`);
-        });
-
-        console.log('All custom rates:', customRates);
-
-        // Create calculator parameters
-        const params = {
-            debtAmount: getNumericValue(document.getElementById('debt_amount')),
-            startYear: Number(document.getElementById('start_year').value),
-            isSingle: document.getElementById('is_single').value === 'true',
-            referenceIncome: getNumericValue(document.getElementById('reference_income')),
-            maxMonthlyPayment: getNumericValue(document.getElementById('max_payment')),
-            loanType: document.getElementById('loan_type').value,
-            customRates: customRates
-        };
+        console.log('Form submitted - starting calculations');
 
         try {
+            // Collect custom rates
+            const customRates = {};
+            document.querySelectorAll('.future-rate').forEach(input => {
+                const period = Number(input.dataset.period);
+                const value = Number(input.value);
+                if (isNaN(value) || value < 0 || value > 10) {
+                    throw new Error(`Invalid interest rate: ${input.value}%`);
+                }
+                const rate = value / 100;
+                customRates[period] = rate;
+            });
+
+            console.log('Custom rates collected:', customRates);
+
+            // Get form values
+            const debtAmount = getNumericValue(document.getElementById('debt_amount'));
+            const startYear = Number(document.getElementById('start_year').value);
+            const isSingle = document.getElementById('is_single').value === 'true';
+            const referenceIncome = getNumericValue(document.getElementById('reference_income'));
+            const maxMonthlyPayment = getNumericValue(document.getElementById('max_payment'));
+            const loanType = document.getElementById('loan_type').value;
+
+            console.log('Form values:', {
+                debtAmount,
+                startYear,
+                isSingle,
+                referenceIncome,
+                maxMonthlyPayment,
+                loanType
+            });
+
+            // Create calculator parameters
+            const params = {
+                debtAmount,
+                startYear,
+                isSingle,
+                referenceIncome,
+                maxMonthlyPayment,
+                loanType,
+                customRates
+            };
+
+            console.log('Creating calculator with params:', params);
             const calculator = new LoanCalculator(params);
+
+            console.log('Generating summaries...');
             const minimumSummary = calculator.generateMinimumMonthlySummary();
             const optimizedSummary = calculator.generateOptimizedSummary();
+            console.log('Summaries generated:', { minimumSummary, optimizedSummary });
+
+            // Show summary section
+            const summarySection = document.getElementById('summary');
+            if (!summarySection) {
+                throw new Error('Summary section not found in DOM');
+            }
+            summarySection.classList.add('visible');
+            console.log('Summary section made visible');
 
             // Update summary display with both strategies
-            document.getElementById('summary').innerHTML = `
-                <h2>Vergelijking Strategieën</h2>
-                
+            summarySection.innerHTML = `
                 <div class="strategy-comparison">
                     <div class="strategy">
                         <h3>${minimumSummary.strategy}</h3>
@@ -404,7 +438,6 @@ document.addEventListener('DOMContentLoaded', function() {
                             <span class="result-value">${minimumSummary.repaymentYears} jaar</span>
                         </div>
                     </div>
-
                     <div class="strategy">
                         <h3>${optimizedSummary.strategy}</h3>
                         <div class="result-row">
@@ -430,24 +463,63 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </div>
             `;
+            console.log('Summary HTML updated');
 
-            // Show results and charts
-            const summaryElement = document.getElementById('summary');
+            // Show and update charts
             const chartsContainer = document.querySelector('.charts-container');
-            
-            summaryElement.classList.add('visible');
-            chartsContainer.classList.add('visible');
-            
-            // Update charts to show both strategies
+            if (!chartsContainer) {
+                throw new Error('Charts container not found in DOM');
+            }
+            chartsContainer.style.display = 'grid';
+            console.log('Charts container made visible');
+
             updateCharts(minimumSummary.timeline, optimizedSummary.timeline);
-            
+            console.log('Charts updated');
+
             // Scroll to results
-            summaryElement.scrollIntoView({ behavior: 'smooth' });
+            summarySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            console.log('Scrolled to results');
+
         } catch (error) {
+            console.error('Calculation error:', error);
             alert('Error: ' + error.message);
         }
     });
 
     // Add loan type change handler
     document.getElementById('loan_type').addEventListener('change', initializeFutureRates);
+
+    // Track modal opens
+    document.querySelectorAll('.header-links a').forEach(link => {
+        link.addEventListener('click', function(e) {
+            const pageName = this.getAttribute('href').replace('.html', '');
+            gtag('event', 'modal_open', {
+                'modal_type': pageName
+            });
+        });
+    });
+
+    // Track external link clicks
+    document.querySelectorAll('a[target="_blank"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            gtag('event', 'external_link_click', {
+                'link_url': this.href,
+                'link_text': this.textContent.trim()
+            });
+        });
+    });
+
+    // Track Buy Me a Coffee button clicks
+    // Wait for the button to be loaded
+    const bmc_interval = setInterval(() => {
+        const bmcButton = document.querySelector('.bmc-btn');
+        if (bmcButton) {
+            clearInterval(bmc_interval);
+            bmcButton.addEventListener('click', function() {
+                gtag('event', 'support_click', {
+                    'type': 'buy_me_coffee'
+                });
+            });
+        }
+    }, 1000);
 }); 
