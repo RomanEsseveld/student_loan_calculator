@@ -566,4 +566,29 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     }, 1000);
+
+    // Handle tooltips on mobile
+    document.querySelectorAll('.info-tooltip').forEach(tooltip => {
+        tooltip.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Remove active class from all other tooltips
+            document.querySelectorAll('.info-tooltip.active').forEach(t => {
+                if (t !== tooltip) t.classList.remove('active');
+            });
+            
+            // Toggle active class on clicked tooltip
+            tooltip.classList.toggle('active');
+        });
+    });
+
+    // Close tooltip when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.info-tooltip')) {
+            document.querySelectorAll('.info-tooltip.active').forEach(tooltip => {
+                tooltip.classList.remove('active');
+            });
+        }
+    });
 }); 

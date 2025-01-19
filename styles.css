@@ -407,18 +407,57 @@ body {
     color: var(--color-primary);
 }
 
-/* Utilities */
+/* Tooltip Styles */
 .info-tooltip {
     display: inline-block;
     margin-left: 0.5rem;
     color: #6b7280;
     cursor: help;
+    position: relative;
 }
 
-.info-tooltip:hover {
-    opacity: 1;
+.info-tooltip::before {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.5rem;
+    background: #333;
+    color: white;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 1000;
+    width: max-content;
+    max-width: 300px;
+    text-align: center;
 }
 
+/* Show tooltip on hover for desktop */
+@media (hover: hover) {
+    .info-tooltip:hover::before {
+        visibility: visible;
+        opacity: 1;
+    }
+}
+
+/* Show tooltip on tap for mobile */
+@media (hover: none) {
+    .info-tooltip {
+        padding: 0.5rem;
+    }
+    
+    .info-tooltip.active::before {
+        visibility: visible;
+        opacity: 1;
+    }
+}
+
+/* Utilities */
 .section-separator {
     border-bottom: 1px solid #e5e7eb;
     margin: var(--spacing-lg) auto;
