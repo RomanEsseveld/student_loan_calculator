@@ -161,7 +161,7 @@
                             <div class="form-group">
                         <label class="form-label" for="start_year">
                                     Start Aanloopfase
-                                    <span class="info-tooltip" title="Dit is het eerste jaar na het behalen van je diploma">ⓘ</span>
+                                    <span class="info-tooltip" data-tooltip="Dit is het eerste jaar na het behalen van je diploma">ⓘ</span>
                                 </label>
                         <select class="form-input" id="start_year" required>
                                     <!-- Will be populated by JavaScript -->
@@ -171,7 +171,7 @@
                             <div class="form-group">
                         <label class="form-label" for="is_single">
                                     Alleenstaand zonder kinderen
-                                    <span class="info-tooltip" title="Dit beïnvloedt de draagkrachtvrije voet in de berekening">ⓘ</span>
+                                    <span class="info-tooltip" data-tooltip="Geef aan of je alleenstaand bent en geen kinderen hebt">ⓘ</span>
                                 </label>
                         <select class="form-input" id="is_single" required>
                                     <option value="true">Ja</option>
@@ -182,7 +182,7 @@
                             <div class="form-group">
                         <label class="form-label" for="debt_amount">
                                     Totale Studieschuld (€)
-                                    <span class="info-tooltip" title="Dit is uw huidige totale studieschuld, inclusief eventueel opgebouwde rente tot nu toe">ⓘ</span>
+                                    <span class="info-tooltip" data-tooltip="Dit is het totale bedrag van je studieschuld">ⓘ</span>
                                 </label>
                         <input type="text" class="form-input" id="debt_amount" required placeholder="Voer bedrag in">
                             </div>
@@ -190,7 +190,7 @@
                             <div class="form-group">
                         <label class="form-label" for="reference_income">
                                     Bruto Jaarinkomen (€)
-                                    <span class="info-tooltip" title="Dit is uw inkomen van 2 jaar geleden (peiljaar). Tel het inkomen van uw partner altijd mee indien van toepassing.">ⓘ</span>
+                                    <span class="info-tooltip" data-tooltip="Dit is je bruto jaarinkomen, inclusief vakantiegeld en eventuele bonussen">ⓘ</span>
                                 </label>
                         <input type="text" class="form-input" id="reference_income" required placeholder="Voer inkomen in">
                             </div>
@@ -198,7 +198,7 @@
                             <div class="form-group">
                         <label class="form-label" for="max_payment">
                                     Maximaal bereid om maandelijks af te lossen (€)
-                                    <span class="info-tooltip" title="Dit is het maximale bedrag dat je bereid bent maandelijks af te lossen. Dit bedrag kan niet lager zijn dan de minimale maandelijkse aflossing">ⓘ</span>
+                                    <span class="info-tooltip" data-tooltip="Dit is het maximale bedrag dat je maandelijks wilt aflossen">ⓘ</span>
                                 </label>
                         <input type="text" class="form-input" id="max_payment" required placeholder="Voer maximaal bedrag in">
                             </div>
@@ -207,7 +207,7 @@
                         <div class="future-rates">
                     <h3 class="future-rates-title">
                                 Toekomstige Rentepercentages
-                        <span class="info-tooltip" title="De rente op studieschulden wordt elke 5 jaar herzien. Vul verschillende rentepercentages in om te zien welk effect dit heeft op je totale schuld en maandlasten.">ⓘ</span>
+                        <span class="info-tooltip" data-tooltip="De rente op studieschulden wordt elke 5 jaar herzien. Vul verschillende rentepercentages in om te zien welk effect dit heeft op je totale schuld en maandlasten.">ⓘ</span>
                     </h3>
                             <div id="future_rates_container">
                                 <!-- Will be populated by JavaScript -->
