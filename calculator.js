@@ -13,8 +13,8 @@ export default class LoanCalculator {
         if (!params.debtAmount || params.debtAmount <= 0) {
             throw new Error("Debt amount must be positive");
         }
-        if (!params.startYear || params.startYear < 2022 || params.startYear > 2025) {
-            throw new Error(`Start year must be between 2022 and 2025`);
+        if (!params.startYear || params.startYear < 2016 || params.startYear > 2025) {
+            throw new Error(`Start year must be between 2016 and 2025`);
         }
         if (params.referenceIncome < 0) {
             throw new Error("Income cannot be negative");
@@ -25,10 +25,15 @@ export default class LoanCalculator {
     }
 
     getInterestRate(year) {
+        // For years before 2023, return 0%
         if (year < 2023) return 0;
-        if (year in YEARLY_CONSTANTS) return YEARLY_CONSTANTS[year].interestRate[this.params.loanType];
         
-        // Find which 5-year period this year belongs to
+        // For known years, return the exact rate
+        if (year in YEARLY_CONSTANTS) {
+            return YEARLY_CONSTANTS[year].interestRate[this.params.loanType];
+        }
+        
+        // For future years, find which 5-year period they belong to
         let periodStart;
         if (year >= 2025 && year <= 2029) periodStart = 2025;
         else if (year >= 2030 && year <= 2034) periodStart = 2030;
@@ -38,9 +43,19 @@ export default class LoanCalculator {
         else if (year >= 2050 && year <= 2054) periodStart = 2050;
         else if (year >= 2055 && year <= 2059) periodStart = 2055;
         
-        // Use custom rate if available, otherwise use default
-        const rate = this.params.customRates?.[periodStart];
-        return rate === undefined ? CONFIG.DEFAULT_FUTURE_RATE : rate;
+        // If we have a custom rate for this period and it's not a known period, use it
+        if (periodStart > 2025) {
+            const rate = this.params.customRates?.[periodStart];
+            return rate === undefined ? CONFIG.DEFAULT_FUTURE_RATE : rate;
+        }
+        
+        // For 2025-2029 period, use the known 2025 rate
+        if (periodStart === 2025) {
+            return YEARLY_CONSTANTS[2025].interestRate[this.params.loanType];
+        }
+        
+        // Fallback to default rate
+        return CONFIG.DEFAULT_FUTURE_RATE;
     }
 
     calculateMonthlyPayment(annualIncome, remainingBalance, interestRate, remainingMonths, year) {
@@ -65,16 +80,17 @@ export default class LoanCalculator {
     }
 
     getBaseExemptionThreshold() {
-        const year = this.params.startYear;
+        const currentYear = new Date().getFullYear();
+        const pijljaar = currentYear - 2;  // Use pijljaar (2 years before current year)
         const loanType = this.params.loanType;
         
-        // Get the base threshold for the specific loan type
-        const threshold = YEARLY_CONSTANTS[year]?.exemptionThreshold[loanType] || 
+        // Get the base threshold for the specific loan type using pijljaar
+        const threshold = YEARLY_CONSTANTS[pijljaar]?.exemptionThreshold[loanType] || 
                          YEARLY_CONSTANTS[Object.keys(YEARLY_CONSTANTS).pop()].exemptionThreshold[loanType];
         
         if (!this.params.isSingle && loanType === 'SF15') {
             // For SF15 with partner, use specific partner thresholds
-            return SF15_PARTNER_THRESHOLDS[year] || 
+            return SF15_PARTNER_THRESHOLDS[pijljaar] || 
                    SF15_PARTNER_THRESHOLDS[Object.keys(SF15_PARTNER_THRESHOLDS).pop()];
         }
         

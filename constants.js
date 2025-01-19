@@ -1,5 +1,65 @@
 // Yearly constants for exemption thresholds and interest rates
 export const YEARLY_CONSTANTS = {
+    2016: {
+        interestRate: {
+            SF35: 0.00,
+            SF15: 0.00
+        },
+        exemptionThreshold: {
+            SF35: 22356.00,
+            SF15: 18779.04
+        }
+    },
+    2017: {
+        interestRate: {
+            SF35: 0.00,
+            SF15: 0.00
+        },
+        exemptionThreshold: {
+            SF35: 22356.00,
+            SF15: 18779.04
+        }
+    },
+    2018: {
+        interestRate: {
+            SF35: 0.00,
+            SF15: 0.00
+        },
+        exemptionThreshold: {
+            SF35: 22356.00,
+            SF15: 18779.04
+        }
+    },
+    2019: {
+        interestRate: {
+            SF35: 0.00,
+            SF15: 0.00
+        },
+        exemptionThreshold: {
+            SF35: 22356.00,
+            SF15: 18779.04
+        }
+    },
+    2020: {
+        interestRate: {
+            SF35: 0.00,
+            SF15: 0.00
+        },
+        exemptionThreshold: {
+            SF35: 22356.00,
+            SF15: 18779.04
+        }
+    },
+    2021: {
+        interestRate: {
+            SF35: 0.00,
+            SF15: 0.00
+        },
+        exemptionThreshold: {
+            SF35: 22356.00,
+            SF15: 18779.04
+        }
+    },
     2022: {
         interestRate: {
             SF35: 0.00,
@@ -48,7 +108,7 @@ export const CONFIG = {
 };
 
 export const VALID_YEARS = {
-    MIN: 2022,
+    MIN: 2016,
     MAX: 2025
 };
 

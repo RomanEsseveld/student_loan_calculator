@@ -32,40 +32,29 @@ function initializeFutureRates() {
     const container = document.getElementById('future_rates_container');
     container.innerHTML = '';
 
-    // First period (not editable)
-    const firstPeriodStart = startYear;
-    const firstPeriodEnd = startYear + 4;
-    let firstPeriodRate;
-    
-    // Determine first period rate based on start year
-    if (startYear in YEARLY_CONSTANTS) {
-        firstPeriodRate = (YEARLY_CONSTANTS[startYear].interestRate[loanType] * 100).toFixed(2);
-    }
+    // Calculate periods based on loan type plus 2 years for grace period
+    const totalYears = (LOAN_TYPES[loanType].REPAYMENT_MONTHS / 12) + 2;
+    const currentYear = new Date().getFullYear();
 
-    // Add first period (read-only)
-    const firstPeriodDiv = document.createElement('div');
-    firstPeriodDiv.className = 'rate-input-group';
-    firstPeriodDiv.innerHTML = `
-        <label>${firstPeriodStart}-${firstPeriodEnd}</label>
-        <input type="number" 
-               value="${firstPeriodRate}"
-               readonly
-               disabled
-               style="background-color: #f5f5f5;">
-    `;
-    container.appendChild(firstPeriodDiv);
+    // Add all 5-year periods
+    let periodStart = startYear;
+    while (periodStart < startYear + totalYears) {
+        const periodEnd = periodStart + 4;
+        let periodRate;
+        let isReadOnly = false;
 
-    // Calculate remaining periods based on loan type plus 2 years for grace period
-    const totalYears = (LOAN_TYPES[loanType].REPAYMENT_MONTHS / 12) + 2;  // Add 2 years for grace period
-    const remainingYears = totalYears - 5;
-    const numPeriods = Math.ceil(remainingYears / 5);
-    const secondPeriodStart = firstPeriodEnd + 1;
+        // Determine if this period's rate is known/locked
+        if (periodStart <= 2020) {
+            periodRate = 0.00;
+            isReadOnly = true;
+        } else if (periodStart <= 2025 && periodStart in YEARLY_CONSTANTS) {
+            periodRate = (YEARLY_CONSTANTS[periodStart].interestRate[loanType] * 100).toFixed(2);
+            isReadOnly = true;
+        } else {
+            periodRate = 2.5; // Default future rate
+            isReadOnly = false;
+        }
 
-    // Add future periods (editable)
-    for (let i = 0; i < numPeriods; i++) {
-        const periodStart = secondPeriodStart + (i * 5);
-        const periodEnd = Math.min(periodStart + 4, startYear + totalYears - 1);
-        
         const div = document.createElement('div');
         div.className = 'rate-input-group';
         div.innerHTML = `
@@ -73,12 +62,16 @@ function initializeFutureRates() {
             <input type="number" 
                    class="future-rate" 
                    data-period="${periodStart}" 
-                   value="2.5" 
+                   value="${periodRate}"
                    step="0.01" 
                    min="0" 
-                   max="10">
+                   max="10"
+                   ${isReadOnly ? 'readonly disabled style="background-color: #f5f5f5;"' : ''}>
         `;
         container.appendChild(div);
+
+        periodStart += 5;
+        if (periodStart >= startYear + totalYears) break;
     }
 }
 
