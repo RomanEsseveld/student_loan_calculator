@@ -89,17 +89,29 @@ function formatNumber(input, isBlur = false) {
         return;
     }
 
-    // During typing, only remove non-digits
+    // During typing, allow digits and one decimal separator
     if (!isBlur) {
-        let value = input.value.replace(/[^\d]/g, '');
+        let value = input.value.replace(/[^\d,]/g, ''); // Allow digits and comma
+        
+        // Handle decimal separator (comma)
+        let parts = value.split(',');
+        if (parts.length > 2) {
+            // Keep only first comma and up to 2 decimal places
+            value = parts[0] + ',' + parts.slice(1).join('').slice(0, 2);
+        } else if (parts.length === 2) {
+            // Limit decimal places to 2
+            value = parts[0] + ',' + parts[1].slice(0, 2);
+        }
+        
         input.value = value;
         return;
     }
 
     // On blur, format the number properly
-    let value = input.value.replace(/[^\d]/g, '');
+    let value = input.value;
     if (value) {
-        const number = parseInt(value);
+        // Convert to number for validation (replace comma with dot for parsing)
+        const number = parseFloat(value.replace(/\./g, '').replace(',', '.'));
         if (!isNaN(number)) {
             input.value = number.toLocaleString('nl-NL', {
                 minimumFractionDigits: 2,
